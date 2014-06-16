@@ -1,0 +1,50 @@
+{% extends "server_stats/base.html" %}
+
+{% block title %}Server Stats{% endblock %}
+{% block ux_chart_nav %}active{% endblock %}
+
+{% block content %}
+    <h1>User-Experience Chart</h1>
+    This is a page with information about the <strong>user's experience</strong> over the PAST {{ yesterday|timesince|upper }}<br>
+    <a href='{% url server_stats-benchmark "60" "seconds" %}'>past 60 seconds</a> |
+    <a href='{% url server_stats-benchmark "30" "minutes" %}'>past 30 minutes</a> |
+    <a href='{% url server_stats-benchmark "24" "hours" %}'>past 24 hours</a>
+    <br><br>
+    
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load('visualization', '1', {'packages':['motionchart']});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'User');
+        data.addColumn('number', 'Timeline');
+        //data.addColumn('date', 'Date');
+        data.addColumn('string', 'URL');
+        data.addColumn('string', 'View Name');
+        data.addColumn('number', 'Gen Time');
+        data.addColumn('string', 'Milestone');
+        data.addRows([
+            {% for d in data %}
+                [
+                    '{{ d.user }}',
+                    {{ d.timeline }},
+                    //new Date ({{ d.datetime.year }}, {{ d.datetime.month }}, {{ d.datetime.day }}),
+                    '{{ d.url }}',
+                    '{{ d.view_name }}',
+                    {{ d.gen_time }},
+                    '{{ d.miletone }}'
+                ]
+                {% if not forloop.last %}
+                    ,
+                {% endif %}
+            {% endfor %}
+        ]);
+        var chart = new google.visualization.MotionChart(document.getElementById('chart_div'));
+        chart.draw(data, {width: 800, height:400});
+      }
+    </script>
+
+    <div id="chart_div" style="width: 800px; height: 400px;"></div>
+{% endblock %}
+

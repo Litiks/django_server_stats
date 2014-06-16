@@ -1,0 +1,79 @@
+{% extends "server_stats/base.html" %}
+
+{% block title %}Server Stats{% endblock %}
+{% block stats_nav %}active{% endblock %}
+
+{% block content %}
+    <h1>Server Stats</h1>
+    This is a page with information about the server load over the PAST {{ yesterday|timesince|upper }}<br>
+    <a href='{% url server_stats "60" "seconds" %}'>past 60 seconds</a> |
+    <a href='{% url server_stats "30" "minutes" %}'>past 30 minutes</a> |
+    <a href='{% url server_stats "24" "hours" %}'>past 24 hours</a>
+    
+    <h2>Top Pages <small>({{ total_pages }} total)</small></h2>
+    <table>
+        <tr>
+            <td><b>url</b></td>
+            <td><b>count</b></td>
+        </tr>
+        {% for page in sorted_top_pages %}
+            <tr>
+                <td>
+                    <a href='{{ page.0 }}'>{{ page.0 }}</a>
+                </td>
+                <td style='text-align:right;'>{{ page.1 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <br>
+    
+    <h2>Top Users <small>({{ total_users }} total)</small></h2>
+    <table>
+        <tr>
+            <td><b>user</b></td>
+            <td><b>page count</b></td>
+        </tr>
+        {% for user in sorted_top_users %}
+            <tr>
+                <td>{{ user.0 }}</td>
+                <td style='text-align:right;'>{{ user.1 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <br>
+    
+    <h2>Slowest Pages</h2>
+    <table>
+        <tr>
+            <td><b>url</b></td>
+            <td><b>time (in seconds)</b></td>
+        </tr>
+        {% for page in sorted_slowest_pages %}
+            <tr>
+                <td>
+                    <a href='{{ page.0 }}'>{{ page.0 }}</a>
+                </td>
+                <td style='text-align:right;'>{{ page.1 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <br>
+    
+    <h2>Users Experiencing Errors</h2>
+    <table>
+        <tr>
+            <td><b>user</b></td>
+            <td><b>error count</b></td>
+        </tr>
+        {% for user in sorted_users_with_errors %}
+            <tr>
+                <td>{{ user.0 }}</td>
+                <td style='text-align:right;'>{{ user.1 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <br>
+    
+    
+{% endblock %}
+

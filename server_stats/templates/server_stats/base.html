@@ -1,0 +1,12 @@
+{% extends "master/base.html" %}
+
+{% block content_container %}
+    <ul class="nav nav-tabs">
+        <li class="subnav_1 {% block stats_nav %}{% endblock %}"><a href="{% url server_stats %}">Stats</a></li>
+        <li class="subnav_2 {% block benchmark_nav %}{% endblock %}"><a href="{% url server_stats-benchmark %}">Benchmarks</a></li>
+        {#<li class="subnav_2 {% block ux_chart_nav %}{% endblock %}"><a href="{% url server_stats-ux_chart %}">UX Chart</a></li>#}
+        <li class="subnav_2 {% block initial_ux_chart_nav %}{% endblock %}"><a href="{% url server_stats-initial_ux_chart %}">Initial UX Chart</a></li>
+    </ul>
+    {% block content %}This is where content goes{% endblock %}
+{% endblock %}
+

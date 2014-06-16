@@ -1,0 +1,21 @@
+{% extends "server_stats/base.html" %}
+{% load display_tags %}
+
+{% block title %}Add/Edit Milestone{% endblock %}
+{% block benchmark_nav %}active{% endblock %}
+
+{% block content %}
+    <h1>Add/Edit Milestone</h1>
+    <form action='.' method='POST' enctype="multipart/form-data" class='form-horizontal'>
+        {% csrf_token %}
+        {{ form|as_bootstrap }}
+        <div class="form-actions">
+            <input type='submit' class='btn btn-primary' value='Save'>
+        </div>
+    </form>
+
+{% endblock %}
+
+
+
+

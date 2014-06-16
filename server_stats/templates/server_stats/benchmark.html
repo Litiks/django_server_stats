@@ -1,0 +1,75 @@
+{% extends "server_stats/base.html" %}
+
+{% block title %}Server Stats{% endblock %}
+{% block benchmark_nav %}active{% endblock %}
+
+{% block content %}
+    <h1>Benchmarks</h1>
+    This is a page with information about the server <strong>performance</strong> over the PAST {{ yesterday|timesince|upper }}<br>
+    <a href='{% url server_stats-benchmark "60" "seconds" %}'>past 60 seconds</a> |
+    <a href='{% url server_stats-benchmark "30" "minutes" %}'>past 30 minutes</a> |
+    <a href='{% url server_stats-benchmark "24" "hours" %}'>past 24 hours</a>
+    <br><br>
+    
+    <a href='{% url server_stats-edit_milestone %}' class='btn'>Add Milestone</a>
+    <br><br>
+    
+    <table class='table table-bordered table-striped'>
+        <thead>
+            <tr>
+                <th>View</th>
+                <th colspan='{{ milestone|length }}'>Gen-time in seconds</th>
+            </tr>
+            <tr>
+                <th>&nbsp;</th>
+                {% for milestone in milestones %}
+                    <th>{{ milestone }} ({{ milestone.datetime }})</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>All Views</th>
+                {% for total, change, count in totals %}
+                    <td>
+                        {{ total }} seconds
+                        {% if change %}
+                            {% if change > 0 %}
+                                <span style='color:red;'>(+{{ change|floatformat }}%)</span>
+                            {% else %}
+                                <span style='color:green;'>({{ change|floatformat }}%)</span>
+                            {% endif %}
+                        {% endif %}
+                        <small>[{{ count }} pages]</small>
+                    </td>
+                {% endfor %}
+            </tr>
+            {% for view in views %}
+                <tr>
+                    <td>{{ view.name }}</td>
+                    {% for m in view.milestones %}
+                        <td>
+                            {% for type, data in m.items %}
+                                {{ type }}:
+                                {{ data.0 }} seconds
+                                {% if data.1 %}
+                                    {% if data.1 > 0 %}
+                                        <span style='color:red;'>(+{{ data.1|floatformat }}%)</span>
+                                    {% else %}
+                                        <span style='color:green;'>({{ data.1|floatformat }}%)</span>
+                                    {% endif %}
+                                {% endif %}
+                                <small>[{{ data.2 }} pages]</small>
+                                {% if not forloop.last %}
+                                    <br>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+{% endblock %}
+
