@@ -35,4 +35,4 @@ Setup
 Usage
 -----
 
-Allow the site to gather activity, then view the logs within <yoursite>/admin/ or <yoursite>/server_stats/ (if applicable)
+Allow the site to gather activity, then view the logs within {{yoursite}}/admin/ or {{yoursite}}/server_stats/ (if applicable)
